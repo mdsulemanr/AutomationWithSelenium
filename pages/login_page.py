@@ -1,6 +1,5 @@
-# login_page.py
 from selenium.webdriver.common.by import By
-
+from selenium.common.exceptions import NoSuchElementException
 
 class LoginPage:
     def __init__(self, driver):
@@ -11,16 +10,36 @@ class LoginPage:
         self.success_message = (By.CSS_SELECTOR, "div.flash.success")
 
     def open_login_page(self):
+        """Opens the login page."""
         self.driver.get("https://the-internet.herokuapp.com/login")
 
+    def find_element(self, locator):
+        """Helper method to find elements with error handling."""
+        try:
+            return self.driver.find_element(*locator)
+        except NoSuchElementException:
+            print(f"Element {locator} not found.")
+            return None
+
     def enter_username(self, username):
-        self.driver.find_element(*self.username_field).send_keys(username)
+        """Enters the username in the username field."""
+        element = self.find_element(self.username_field)
+        if element:
+            element.send_keys(username)
 
     def enter_password(self, password):
-        self.driver.find_element(*self.password_field).send_keys(password)
+        """Enters the password in the password field."""
+        element = self.find_element(self.password_field)
+        if element:
+            element.send_keys(password)
 
     def click_login(self):
-        self.driver.find_element(*self.login_button).click()
+        """Clicks the login button."""
+        element = self.find_element(self.login_button)
+        if element:
+            element.click()
 
     def get_success_message(self):
-        return self.driver.find_element(*self.success_message).text
+        """Returns the success message after login."""
+        element = self.find_element(self.success_message)
+        return element.text if element else ""
