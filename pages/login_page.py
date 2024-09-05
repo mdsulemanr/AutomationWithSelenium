@@ -1,5 +1,9 @@
+import logging
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 class LoginPage:
@@ -18,12 +22,13 @@ class LoginPage:
         try:
             return self.driver.find_element(*locator)
         except NoSuchElementException:
-            print(f"Element {locator} not found.")
+            logging.error(f"Element {locator} not found.")
             return None
 
     # Actions
     def open_login_page(self, url):
         """Opens the login page."""
+        logging.info(f"Opening login page: {url}")
         self.driver.get(url)
 
     def enter_username(self, username):
@@ -31,31 +36,36 @@ class LoginPage:
         element = self.find_element(self.username_field)
         if element:
             element.send_keys(username)
+            logging.info("Entered username.")
         else:
-            print("Username field not found.")
+            logging.error("Username field not found.")
 
     def enter_password(self, password):
         """Fills the password field with error handling."""
         element = self.find_element(self.password_field)
         if element:
             element.send_keys(password)
+            logging.info("Entered password.")
         else:
-            print("Password field not found.")
+            logging.error("Password field not found.")
 
     def click_login(self):
         """Clicks the login button with error handling."""
         element = self.find_element(self.login_button)
         if element:
             element.click()
+            logging.info("Clicked login button.")
         else:
-            print("Login button not found.")
+            logging.error("Login button not found.")
 
     # Getter
     def get_success_message(self):
         """Gets the success message after login with error handling."""
         element = self.find_element(self.success_message)
         if element:
-            return element.text
+            success_message = element.text
+            logging.info("Success message retrieved.")
+            return success_message
         else:
-            print("Success message not found.")
+            logging.error("Success message not found.")
             return None
