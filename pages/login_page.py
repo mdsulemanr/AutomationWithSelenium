@@ -1,45 +1,61 @@
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
+
 class LoginPage:
+    # Locators as class variables
+    username_field = (By.ID, "username")
+    password_field = (By.ID, "password")
+    login_button = (By.CSS_SELECTOR, "button.radius")
+    success_message = (By.CSS_SELECTOR, "div.flash.success")
+
     def __init__(self, driver):
         self.driver = driver
-        self.username_field = (By.ID, "username")
-        self.password_field = (By.ID, "password")
-        self.login_button = (By.CSS_SELECTOR, "button.radius")
-        self.success_message = (By.CSS_SELECTOR, "div.flash.success")
 
-    def open_login_page(self):
-        """Opens the login page."""
-        self.driver.get("https://the-internet.herokuapp.com/login")
-
+    # Centralized method for finding elements with error handling
     def find_element(self, locator):
-        """Helper method to find elements with error handling."""
+        """Helper method to find an element with error handling."""
         try:
             return self.driver.find_element(*locator)
         except NoSuchElementException:
             print(f"Element {locator} not found.")
             return None
 
+    # Actions
+    def open_login_page(self, url):
+        """Opens the login page."""
+        self.driver.get(url)
+
     def enter_username(self, username):
-        """Enters the username in the username field."""
+        """Fills the username field with error handling."""
         element = self.find_element(self.username_field)
         if element:
             element.send_keys(username)
+        else:
+            print("Username field not found.")
 
     def enter_password(self, password):
-        """Enters the password in the password field."""
+        """Fills the password field with error handling."""
         element = self.find_element(self.password_field)
         if element:
             element.send_keys(password)
+        else:
+            print("Password field not found.")
 
     def click_login(self):
-        """Clicks the login button."""
+        """Clicks the login button with error handling."""
         element = self.find_element(self.login_button)
         if element:
             element.click()
+        else:
+            print("Login button not found.")
 
+    # Getter
     def get_success_message(self):
-        """Returns the success message after login."""
+        """Gets the success message after login with error handling."""
         element = self.find_element(self.success_message)
-        return element.text if element else ""
+        if element:
+            return element.text
+        else:
+            print("Success message not found.")
+            return None
