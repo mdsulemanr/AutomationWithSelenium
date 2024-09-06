@@ -2,6 +2,7 @@ from selenium import webdriver
 from pages.login_page import LoginPage
 from config import BASE_URL, USERNAME, PASSWORD
 
+
 def test_valid_login():
     driver = webdriver.Chrome()
     login_page = LoginPage(driver)
@@ -17,6 +18,7 @@ def test_valid_login():
     # Verify the success message
     success_message = login_page.get_success_message()
     assert "You logged into a secure area!" in success_message
+    driver.save_screenshot("login_page.png")
 
     # Close the browser
     driver.quit()

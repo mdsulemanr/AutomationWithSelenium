@@ -1,9 +1,18 @@
 import logging
+import logging.config
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
+# logging.config.fileConfig('logging.conf')
+# logger = logging.getLogger(__name__)
+
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    filename='test_log.log',  # Set log file name
+    filemode='a',  # Append to file
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 
 class LoginPage:
